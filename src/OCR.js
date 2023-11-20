@@ -7,7 +7,7 @@ const performOCR = async (imagePath) => {
         'eng', // Language code for English
         { } // Optional logger
     );
-
+    console.log("Tesseract ran on "+imagePath)
     return result.data.text;
   } catch (error) {
     console.error('Error performing OCR:', error.message);
