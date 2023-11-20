@@ -1,3 +1,6 @@
+require('@babel/polyfill');
+require('core-js/features/promise');
+
 const {convertPDFToImages, deleteCorrespondingImages} = require("./ImageGeneration");
 const {performOCR} = require("./OCR");
 const {processToJSON} = require("./TextParser");
@@ -20,7 +23,7 @@ const processPDF = async (billCollection) => {
       // Perform OCR on each image
       for (const imagePath of imagePaths) {
         try {
-          console.log("Start OCR on ${imagePath}");
+          console.log(`Start OCR on ${imagePath}`);
           data = await performOCR(imagePath);
         } catch (e) {
           console.log("Error in running OCR ")
@@ -37,7 +40,8 @@ const processPDF = async (billCollection) => {
   });
   // Wait for all promises to resolve
   console.log(processingPromises);
-  await Promise.all(processingPromises);
+  const p = await Promise.all(processingPromises);
+  console.log(p);
   // Once all PDFs are processed, export the Excel file
   exportExcelForBills(Bills, billCollection.directory, billCollection.billStartNumber, billCollection.year)
 

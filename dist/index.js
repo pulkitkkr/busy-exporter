@@ -7,6 +7,8 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+require('@babel/polyfill');
+require('core-js/features/promise');
 var _require = require("./ImageGeneration"),
   convertPDFToImages = _require.convertPDFToImages,
   deleteCorrespondingImages = _require.deleteCorrespondingImages;
@@ -23,7 +25,7 @@ var _require5 = require("./BillCollections"),
   hasExcelSheetFilter = _require5.hasExcelSheetFilter;
 var processPDF = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(billCollection) {
-    var Bills, processingPromises;
+    var Bills, processingPromises, p;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -48,55 +50,67 @@ var processPDF = /*#__PURE__*/function () {
                     _iterator.s();
                   case 9:
                     if ((_step = _iterator.n()).done) {
-                      _context.next = 16;
+                      _context.next = 24;
                       break;
                     }
                     imagePath = _step.value;
-                    _context.next = 13;
+                    _context.prev = 11;
+                    console.log("Start OCR on ".concat(imagePath));
+                    _context.next = 15;
                     return performOCR(imagePath);
-                  case 13:
+                  case 15:
                     data = _context.sent;
-                  case 14:
-                    _context.next = 9;
-                    break;
-                  case 16:
-                    _context.next = 21;
+                    _context.next = 22;
                     break;
                   case 18:
                     _context.prev = 18;
-                    _context.t0 = _context["catch"](7);
-                    _iterator.e(_context.t0);
-                  case 21:
-                    _context.prev = 21;
-                    _iterator.f();
-                    return _context.finish(21);
+                    _context.t0 = _context["catch"](11);
+                    console.log("Error in running OCR ");
+                    console.log(_context.t0);
+                  case 22:
+                    _context.next = 9;
+                    break;
                   case 24:
+                    _context.next = 29;
+                    break;
+                  case 26:
+                    _context.prev = 26;
+                    _context.t1 = _context["catch"](7);
+                    _iterator.e(_context.t1);
+                  case 29:
+                    _context.prev = 29;
+                    _iterator.f();
+                    return _context.finish(29);
+                  case 32:
                     JSONData = processToJSON(data);
                     console.log("Successfully Parsed Bill for ".concat(JSONData.clientName, " with ").concat(JSONData.orderItems.length, " item(s)"));
                     Bills.push(JSONData);
                     deleteCorrespondingImages(pdfPath);
-                    _context.next = 33;
+                    _context.next = 41;
                     break;
-                  case 30:
-                    _context.prev = 30;
-                    _context.t1 = _context["catch"](0);
-                    console.error("Error processing PDF: ".concat(pdfPath), _context.t1.message);
-                  case 33:
+                  case 38:
+                    _context.prev = 38;
+                    _context.t2 = _context["catch"](0);
+                    console.error("Error processing PDF: ".concat(pdfPath), _context.t2.message);
+                  case 41:
                   case "end":
                     return _context.stop();
                 }
-              }, _callee, null, [[0, 30], [7, 18, 21, 24]]);
+              }, _callee, null, [[0, 38], [7, 26, 29, 32], [11, 18]]);
             }));
             return function (_x2) {
               return _ref2.apply(this, arguments);
             };
           }()); // Wait for all promises to resolve
-          _context2.next = 6;
+          console.log(processingPromises);
+          _context2.next = 7;
           return Promise.all(processingPromises);
-        case 6:
+        case 7:
+          p = _context2.sent;
+          console.log(p);
           // Once all PDFs are processed, export the Excel file
           exportExcelForBills(Bills, billCollection.directory, billCollection.billStartNumber, billCollection.year);
-        case 7:
+        case 10:
         case "end":
           return _context2.stop();
       }

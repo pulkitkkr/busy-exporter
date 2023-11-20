@@ -19,17 +19,18 @@ var performOCR = /*#__PURE__*/function () {
           );
         case 3:
           result = _context.sent;
+          console.log("Tesseract ran on " + imagePath);
           return _context.abrupt("return", result.data.text);
-        case 7:
-          _context.prev = 7;
+        case 8:
+          _context.prev = 8;
           _context.t0 = _context["catch"](0);
           console.error('Error performing OCR:', _context.t0.message);
           throw _context.t0;
-        case 11:
+        case 12:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 7]]);
+    }, _callee, null, [[0, 8]]);
   }));
   return function performOCR(_x) {
     return _ref.apply(this, arguments);
