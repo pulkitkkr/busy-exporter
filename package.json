@@ -1,0 +1,25 @@
+{
+  "name": "busy-exporter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/index.js",
+    "exec": "rm -rf ./dist && npm run build && node ./dist/index.js",
+    "build": "babel src -d dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
+    "camelcase": "^8.0.0",
+    "core-js": "^3.33.3",
+    "exceljs": "^4.4.0",
+    "pdf-image": "^2.0.0",
+    "regenerator-runtime": "^0.13.11",
+    "tesseract.js": "^5.0.3"
+  }
+}
