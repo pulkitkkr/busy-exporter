@@ -19,7 +19,12 @@ const processPDF = async (billCollection) => {
       let data = {};
       // Perform OCR on each image
       for (const imagePath of imagePaths) {
-        data = await performOCR(imagePath);
+        try {
+          data = await performOCR(imagePath);
+        } catch (e) {
+          console.log("Error in running OCR ")
+          console.log(e)
+        }
       }
       const JSONData = processToJSON(data);
       console.log(`Successfully Parsed Bill for ${JSONData.clientName} with ${JSONData.orderItems.length} item(s)`)
