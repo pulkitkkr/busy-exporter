@@ -44,8 +44,9 @@ const processPDF = async (billCollection) => {
   console.log(p);
   // Once all PDFs are processed, export the Excel file
   exportExcelForBills(Bills, billCollection.directory, billCollection.billStartNumber, billCollection.year)
-
 };
+
+const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const main = async () => {
   const BillCollections = getBillCollections();
@@ -55,6 +56,8 @@ const main = async () => {
   console.log(`Number of Collections Without Excel Files: ${BillCollectionsWithoutExcelFile.length}`);
   console.log(`----------------------------------------\n\n`)
   BillCollectionsWithoutExcelFile.forEach(processPDF)
+  await delay(5000);
+  console.log("Waited 5s");
 }
 
 main().catch(e => console.error(e));

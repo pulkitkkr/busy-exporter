@@ -119,6 +119,11 @@ var processPDF = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
+var delay = function delay(ms) {
+  return new Promise(function (res) {
+    return setTimeout(res, ms);
+  });
+};
 var main = /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
     var BillCollections, BillCollectionsWithoutExcelFile;
@@ -132,7 +137,11 @@ var main = /*#__PURE__*/function () {
           console.log("Number of Collections Without Excel Files: ".concat(BillCollectionsWithoutExcelFile.length));
           console.log("----------------------------------------\n\n");
           BillCollectionsWithoutExcelFile.forEach(processPDF);
-        case 7:
+          _context3.next = 9;
+          return delay(5000);
+        case 9:
+          console.log("Waited 5s");
+        case 10:
         case "end":
           return _context3.stop();
       }
