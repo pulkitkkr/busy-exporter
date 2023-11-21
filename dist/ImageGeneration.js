@@ -10,55 +10,49 @@ var fs = require('fs');
 var getOutputPath = function getOutputPath(pdfPath) {
   return path.join(path.dirname(pdfPath), "images");
 };
-var convertPDFToImagesUsingWindows = /*#__PURE__*/function () {
+function getImagesPaths(subdirectoryPath) {
+  var imagesPath = path.join(subdirectoryPath, 'images');
+  var imagePaths = [];
+
+  // Check if the 'images' directory exists
+  if (!fs.existsSync(imagesPath)) {
+    console.error("Images directory does not exist in ".concat(subdirectoryPath));
+    return imagePaths;
+  }
+
+  // Get a list of image files in the 'images' directory
+  var imageFiles = fs.readdirSync(imagesPath).filter(function (file) {
+    return fs.statSync(path.join(imagesPath, file)).isFile();
+  });
+
+  // Group image paths based on the part of the file name before the last hyphen
+  var groupedPaths = imageFiles.reduce(function (acc, file) {
+    var fileName = path.parse(file).name;
+    var lastHyphenIndex = fileName.lastIndexOf('-');
+    var prefix = lastHyphenIndex !== -1 ? fileName.slice(0, lastHyphenIndex) : fileName;
+    var filePath = path.join(imagesPath, file);
+    if (!acc[prefix]) {
+      acc[prefix] = [];
+    }
+    acc[prefix].push(filePath);
+    return acc;
+  }, {});
+
+  // Convert the grouped paths object to an array of arrays
+  for (var prefix in groupedPaths) {
+    if (Object.hasOwnProperty.call(groupedPaths, prefix)) {
+      imagePaths.push(groupedPaths[prefix]);
+    }
+  }
+  return imagePaths;
+}
+var convertPDFToImages = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(pdfPath) {
-    var images, base, outputPaths, i, imgPath;
+    var OUTPUT_PATH, pdfImage;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          console.log("Converting ==> ".concat(pdfPath));
-          _context.next = 3;
-          return pdf2img.convert(pdfPath);
-        case 3:
-          images = _context.sent;
-          base = getOutputPath(pdfPath);
-          outputPaths = [];
-          i = 0;
-        case 7:
-          if (!(i < images.length)) {
-            _context.next = 16;
-            break;
-          }
-          imgPath = path.join(path.dirname(base), "output" + i + ".png");
-          console.log("Saving Image at ===> ".concat(imgPath));
-          outputPaths.push(imgPath);
-          fs.writeFile(imgPath, images[i], function (error) {
-            if (error) {
-              console.error("Error: " + error);
-            }
-          }); //writeFile
-          return _context.abrupt("return", outputPaths);
-        case 13:
-          i++;
-          _context.next = 7;
-          break;
-        case 16:
-        case "end":
-          return _context.stop();
-      }
-    }, _callee);
-  }));
-  return function convertPDFToImagesUsingWindows(_x) {
-    return _ref.apply(this, arguments);
-  };
-}();
-var convertPDFToImages = /*#__PURE__*/function () {
-  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(pdfPath) {
-    var OUTPUT_PATH, pdfImage;
-    return _regenerator["default"].wrap(function _callee2$(_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
-        case 0:
-          _context2.prev = 0;
+          _context.prev = 0;
           OUTPUT_PATH = getOutputPath(pdfPath);
           if (!fs.existsSync(OUTPUT_PATH)) {
             fs.mkdirSync(OUTPUT_PATH, {
@@ -76,23 +70,23 @@ var convertPDFToImages = /*#__PURE__*/function () {
 
             outputDirectory: OUTPUT_PATH
           });
-          _context2.next = 6;
+          _context.next = 6;
           return pdfImage.convertFile();
         case 6:
-          return _context2.abrupt("return", _context2.sent);
+          return _context.abrupt("return", _context.sent);
         case 9:
-          _context2.prev = 9;
-          _context2.t0 = _context2["catch"](0);
-          console.error('Error converting PDF to images:', _context2.t0.message);
-          throw _context2.t0;
+          _context.prev = 9;
+          _context.t0 = _context["catch"](0);
+          console.error('Error converting PDF to images:', _context.t0.message);
+          throw _context.t0;
         case 13:
         case "end":
-          return _context2.stop();
+          return _context.stop();
       }
-    }, _callee2, null, [[0, 9]]);
+    }, _callee, null, [[0, 9]]);
   }));
-  return function convertPDFToImages(_x2) {
-    return _ref2.apply(this, arguments);
+  return function convertPDFToImages(_x) {
+    return _ref.apply(this, arguments);
   };
 }();
 var deleteCorrespondingImages = function deleteCorrespondingImages(pdfPath) {
@@ -105,5 +99,5 @@ var deleteCorrespondingImages = function deleteCorrespondingImages(pdfPath) {
 module.exports = {
   convertPDFToImages: convertPDFToImages,
   deleteCorrespondingImages: deleteCorrespondingImages,
-  convertPDFToImagesUsingWindows: convertPDFToImagesUsingWindows
+  getImagesPaths: getImagesPaths
 };

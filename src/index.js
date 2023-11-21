@@ -1,7 +1,7 @@
 require('@babel/polyfill');
 require('core-js/features/promise');
 
-const {convertPDFToImages, deleteCorrespondingImages, convertPDFToImagesUsingWindows} = require("./ImageGeneration");
+const {convertPDFToImages, deleteCorrespondingImages, convertPDFToImagesUsingWindows, getImagesPaths} = require("./ImageGeneration");
 const {performOCR} = require("./OCR");
 const {processToJSON} = require("./TextParser");
 const path = require('path');
@@ -12,30 +12,22 @@ const {getBillCollections, hasExcelSheetFilter} = require("./BillCollections");
 const processPDF = async (billCollection) => {
   console.log(`\n++++++++++++ Processing Directory ++++++++++++\n`);
   console.log(`Directory: ${billCollection.directory}`);
+  const BillImages = getImagesPaths(billCollection.directory);
 
   const Bills = [];
-  // Use map to create an array of promises
-  const processingPromises = billCollection.pdfPaths.map(async pdfPath => {
-    try {
-      console.log(`Processing Bill at Path: ${pdfPath}`);
-      const imagePaths = await convertPDFToImages(pdfPath);
-      let data = {};
-      // Perform OCR on each image
-      for (const imagePath of imagePaths) {
-        try {
-          console.log(`Start OCR on ${imagePath}`);
-          data = await performOCR(imagePath);
-        } catch (e) {
-          console.log("Error in running OCR ")
-          console.log(e)
-        }
+  const processingPromises = BillImages.map(async individualBillImages => {
+    let data = {};
+    for (const imagePath of individualBillImages) {
+      try {
+        console.log(`Start OCR on ${imagePath}`);
+        data = await performOCR(imagePath);
+        const JSONData = processToJSON(data);
+        console.log(`Successfully Parsed Bill for ${JSONData.clientName} with ${JSONData.orderItems.length} item(s)`)
+        Bills.push(JSONData);
+      } catch (e) {
+        console.log("Error in running OCR ")
+        console.log(e)
       }
-      const JSONData = processToJSON(data);
-      console.log(`Successfully Parsed Bill for ${JSONData.clientName} with ${JSONData.orderItems.length} item(s)`)
-      Bills.push(JSONData);
-      deleteCorrespondingImages(pdfPath);
-    } catch (error) {
-      console.error(`Error processing PDF: ${pdfPath}`, error.message);
     }
   });
   // Wait for all promises to resolve
@@ -44,6 +36,37 @@ const processPDF = async (billCollection) => {
   console.log(p);
   // Once all PDFs are processed, export the Excel file
   exportExcelForBills(Bills, billCollection.directory, billCollection.billStartNumber, billCollection.year)
+
+  // Use map to create an array of promises
+  // const processingPromises = billCollection.pdfPaths.map(async pdfPath => {
+  //   try {
+  //     console.log(`Processing Bill at Path: ${pdfPath}`);
+  //     const imagePaths = await convertPDFToImages(pdfPath);
+  //     let data = {};
+  //     // Perform OCR on each image
+  //     for (const imagePath of imagePaths) {
+  //       try {
+  //         console.log(`Start OCR on ${imagePath}`);
+  //         data = await performOCR(imagePath);
+  //       } catch (e) {
+  //         console.log("Error in running OCR ")
+  //         console.log(e)
+  //       }
+  //     }
+  //     const JSONData = processToJSON(data);
+  //     console.log(`Successfully Parsed Bill for ${JSONData.clientName} with ${JSONData.orderItems.length} item(s)`)
+  //     Bills.push(JSONData);
+  //     deleteCorrespondingImages(pdfPath);
+  //   } catch (error) {
+  //     console.error(`Error processing PDF: ${pdfPath}`, error.message);
+  //   }
+  // });
+  // // Wait for all promises to resolve
+  // console.log(processingPromises);
+  // const p = await Promise.all(processingPromises);
+  // console.log(p);
+  // // Once all PDFs are processed, export the Excel file
+  // exportExcelForBills(Bills, billCollection.directory, billCollection.billStartNumber, billCollection.year)
 };
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -55,10 +78,7 @@ const main = async () => {
   console.log(`Number of Collections in Bills Directory: ${BillCollections.length}`);
   console.log(`Number of Collections Without Excel Files: ${BillCollectionsWithoutExcelFile.length}`);
   console.log(`----------------------------------------\n\n`)
-  // BillCollectionsWithoutExcelFile.forEach(processPDF)
-  const collectionsOne = BillCollections[0];
-  const firstPdf = collectionsOne.pdfPaths[0];
-  const imagePaths = await convertPDFToImagesUsingWindows(firstPdf);
+  BillCollectionsWithoutExcelFile.forEach(processPDF)
   await delay(5000);
   console.log("Waited 5s");
 }
