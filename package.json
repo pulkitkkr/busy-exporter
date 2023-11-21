@@ -18,6 +18,7 @@
     "core-js": "^3.33.3",
     "exceljs": "^4.4.0",
     "pdf-image": "^2.0.0",
+    "pdf-img-convert": "^1.2.1",
     "regenerator-runtime": "^0.13.11",
     "tesseract.js": "^5.0.3"
   },

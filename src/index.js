@@ -1,7 +1,7 @@
 require('@babel/polyfill');
 require('core-js/features/promise');
 
-const {convertPDFToImages, deleteCorrespondingImages} = require("./ImageGeneration");
+const {convertPDFToImages, deleteCorrespondingImages, convertPDFToImagesUsingWindows} = require("./ImageGeneration");
 const {performOCR} = require("./OCR");
 const {processToJSON} = require("./TextParser");
 const path = require('path');
@@ -58,7 +58,7 @@ const main = async () => {
   // BillCollectionsWithoutExcelFile.forEach(processPDF)
   const collectionsOne = BillCollections[0];
   const firstPdf = collectionsOne.pdfPaths[0];
-  const imagePaths = await convertPDFToImages(firstPdf);
+  const imagePaths = await convertPDFToImagesUsingWindows(firstPdf);
   await delay(5000);
   console.log("Waited 5s");
 }

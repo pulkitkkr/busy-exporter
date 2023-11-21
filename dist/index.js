@@ -10,7 +10,8 @@ require('@babel/polyfill');
 require('core-js/features/promise');
 var _require = require("./ImageGeneration"),
   convertPDFToImages = _require.convertPDFToImages,
-  deleteCorrespondingImages = _require.deleteCorrespondingImages;
+  deleteCorrespondingImages = _require.deleteCorrespondingImages,
+  convertPDFToImagesUsingWindows = _require.convertPDFToImagesUsingWindows;
 var _require2 = require("./OCR"),
   performOCR = _require2.performOCR;
 var _require3 = require("./TextParser"),
@@ -126,7 +127,7 @@ var delay = function delay(ms) {
 };
 var main = /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
-    var BillCollections, BillCollectionsWithoutExcelFile;
+    var BillCollections, BillCollectionsWithoutExcelFile, collectionsOne, firstPdf, imagePaths;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
@@ -136,12 +137,18 @@ var main = /*#__PURE__*/function () {
           console.log("Number of Collections in Bills Directory: ".concat(BillCollections.length));
           console.log("Number of Collections Without Excel Files: ".concat(BillCollectionsWithoutExcelFile.length));
           console.log("----------------------------------------\n\n");
-          BillCollectionsWithoutExcelFile.forEach(processPDF);
-          _context3.next = 9;
-          return delay(5000);
-        case 9:
-          console.log("Waited 5s");
+          // BillCollectionsWithoutExcelFile.forEach(processPDF)
+          collectionsOne = BillCollections[0];
+          firstPdf = collectionsOne.pdfPaths[0];
+          _context3.next = 10;
+          return convertPDFToImagesUsingWindows(firstPdf);
         case 10:
+          imagePaths = _context3.sent;
+          _context3.next = 13;
+          return delay(5000);
+        case 13:
+          console.log("Waited 5s");
+        case 14:
         case "end":
           return _context3.stop();
       }
