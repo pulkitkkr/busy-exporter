@@ -55,7 +55,10 @@ const main = async () => {
   console.log(`Number of Collections in Bills Directory: ${BillCollections.length}`);
   console.log(`Number of Collections Without Excel Files: ${BillCollectionsWithoutExcelFile.length}`);
   console.log(`----------------------------------------\n\n`)
-  BillCollectionsWithoutExcelFile.forEach(processPDF)
+  // BillCollectionsWithoutExcelFile.forEach(processPDF)
+  const collectionsOne = BillCollections[0];
+  const firstPdf = billCollection.pdfPaths[0];
+  const imagePaths = await convertPDFToImages(firstPdf);
   await delay(5000);
   console.log("Waited 5s");
 }

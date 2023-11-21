@@ -21,9 +21,7 @@ const convertPDFToImages = async (pdfPath) => {
       outputDirectory: OUTPUT_PATH,
     });
 
-    const imagePaths = await pdfImage.convertFile();
-
-    return imagePaths;
+    return await pdfImage.convertFile();
   } catch (error) {
     console.error('Error converting PDF to images:', error.message);
     throw error;
