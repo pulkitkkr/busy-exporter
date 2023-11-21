@@ -57,7 +57,7 @@ const main = async () => {
   console.log(`----------------------------------------\n\n`)
   // BillCollectionsWithoutExcelFile.forEach(processPDF)
   const collectionsOne = BillCollections[0];
-  const firstPdf = billCollection.pdfPaths[0];
+  const firstPdf = collectionsOne.pdfPaths[0];
   const imagePaths = await convertPDFToImages(firstPdf);
   await delay(5000);
   console.log("Waited 5s");
