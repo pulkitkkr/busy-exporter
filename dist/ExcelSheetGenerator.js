@@ -1,11 +1,7 @@
 "use strict";
 
-function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+var _toArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toArray"));
 // polyfills required by exceljs
 require('core-js/modules/es.promise');
 require('core-js/modules/es.string.includes');
@@ -93,7 +89,7 @@ var addBillEntry = function addBillEntry(jsonData, billNumber, year) {
   var date = formatDate(jsonData.date);
   var voucherNumber = "".concat(billNumber, "/").concat(year);
   var updatedDealerName = DealerToNewNameMap[jsonData.clientName] || jsonData.clientName;
-  var _jsonData$orderItems = _toArray(jsonData.orderItems),
+  var _jsonData$orderItems = (0, _toArray2["default"])(jsonData.orderItems),
     firstItem = _jsonData$orderItems[0],
     otherItems = _jsonData$orderItems.slice(1);
   var updatedFirstItemUnit = UnitToNewUnitMap[firstItem.unit] || firstItem.unit;

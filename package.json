@@ -13,14 +13,17 @@
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.23.0",
-    "@babel/core": "^7.23.3",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.23.3",
     "camelcase": "^8.0.0",
     "core-js": "^3.33.3",
     "exceljs": "^4.4.0",
     "pdf-image": "^2.0.0",
     "regenerator-runtime": "^0.13.11",
     "tesseract.js": "^5.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/plugin-transform-runtime": "^7.23.4",
+    "@babel/preset-env": "^7.23.3"
   }
 }
