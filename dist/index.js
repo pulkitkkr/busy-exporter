@@ -119,10 +119,29 @@ var processPDF = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
-var BillCollections = getBillCollections();
-var BillCollectionsWithoutExcelFile = BillCollections.filter(hasExcelSheetFilter);
-console.log("++++++++++++ Busy Exporter ++++++++++++");
-console.log("Number of Collections in Bills Directory: ".concat(BillCollections.length));
-console.log("Number of Collections Without Excel Files: ".concat(BillCollectionsWithoutExcelFile.length));
-console.log("----------------------------------------\n\n");
-BillCollectionsWithoutExcelFile.forEach(processPDF);
+var main = /*#__PURE__*/function () {
+  var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
+    var BillCollections, BillCollectionsWithoutExcelFile;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          BillCollections = getBillCollections();
+          BillCollectionsWithoutExcelFile = BillCollections.filter(hasExcelSheetFilter);
+          console.log("++++++++++++ Busy Exporter ++++++++++++");
+          console.log("Number of Collections in Bills Directory: ".concat(BillCollections.length));
+          console.log("Number of Collections Without Excel Files: ".concat(BillCollectionsWithoutExcelFile.length));
+          console.log("----------------------------------------\n\n");
+          BillCollectionsWithoutExcelFile.forEach(processPDF);
+        case 7:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3);
+  }));
+  return function main() {
+    return _ref3.apply(this, arguments);
+  };
+}();
+main()["catch"](function (e) {
+  return console.error(e);
+});

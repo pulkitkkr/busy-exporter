@@ -47,10 +47,14 @@ const processPDF = async (billCollection) => {
 
 };
 
-const BillCollections = getBillCollections();
-const BillCollectionsWithoutExcelFile =  BillCollections.filter(hasExcelSheetFilter);
-console.log(`++++++++++++ Busy Exporter ++++++++++++`);
-console.log(`Number of Collections in Bills Directory: ${BillCollections.length}`);
-console.log(`Number of Collections Without Excel Files: ${BillCollectionsWithoutExcelFile.length}`);
-console.log(`----------------------------------------\n\n`)
-BillCollectionsWithoutExcelFile.forEach(processPDF)
+const main = async () => {
+  const BillCollections = getBillCollections();
+  const BillCollectionsWithoutExcelFile =  BillCollections.filter(hasExcelSheetFilter);
+  console.log(`++++++++++++ Busy Exporter ++++++++++++`);
+  console.log(`Number of Collections in Bills Directory: ${BillCollections.length}`);
+  console.log(`Number of Collections Without Excel Files: ${BillCollectionsWithoutExcelFile.length}`);
+  console.log(`----------------------------------------\n\n`)
+  BillCollectionsWithoutExcelFile.forEach(processPDF)
+}
+
+main().catch(e => console.error(e));
