@@ -12,12 +12,17 @@ const filterLinesNotNeeded = l => {
 }
 
 function extractOrderDetail(itemString) {
-  const regex = /^(\d+)\) (.+?)\s+\|\s+(\d+)\s+([^|\s]+)/;
+  const regex = /^(\d+)\) (.+?)\s+\|\s+(\d+)\s+([^\d\s|]+)/;
   const match = itemString.match(regex);
 
   if (!match) {
     console.log("Unable to process order detail: " + itemString);
-    return null;
+    return {
+      index: "-1",
+      name: "****Name Error****",
+      qty: "#QTY Error",
+      unit: "^Unit Error^",
+    };
   }
 
   const [, index, name, qty, unit] = match;
