@@ -12,7 +12,7 @@ const filterLinesNotNeeded = l => {
 }
 
 function extractOrderDetail(itemString) {
-  const regex = /^(\d+)\) (.+?)\s+\|\s+(\d+)\s+(\w+)/;
+  const regex = /^(\d+)\) (.+?)\s+\|\s+(\d+)\s+([^\d\s]+)/;
   const match = itemString.match(regex);
 
   if (!match) {
