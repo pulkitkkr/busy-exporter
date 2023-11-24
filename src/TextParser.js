@@ -12,7 +12,7 @@ const filterLinesNotNeeded = l => {
 }
 
 function extractOrderDetail(itemString) {
-  const regex = /^(\d+)\) (.+?)\s+\|\s+(\d+)\s+([^\d\s|]+)/;
+  const regex = /^(\d+)\) (.+?)\s+\|\s+(\d+)([^|]+)/;
   const match = itemString.match(regex);
 
   if (!match) {
@@ -25,7 +25,10 @@ function extractOrderDetail(itemString) {
     };
   }
 
-  const [, index, name, qty, unit] = match;
+  const [, index, name, qtyAndUnit] = match;
+
+  // Extract qty and unit from qtyAndUnit by splitting on comma
+  const [qty, unit] = qtyAndUnit.split(',').map(part => part.trim());
 
   return {
     index: parseInt(index, 10),
