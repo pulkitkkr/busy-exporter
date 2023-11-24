@@ -106,15 +106,20 @@ const voucherNumber = `${billNumber}/${year}`;
 const updatedDealerName = DealerToNewNameMap[jsonData.clientName] || jsonData.clientName;
 
 const [firstItem, ...otherItems] = jsonData.orderItems;
-const updatedFirstItemUnit = UnitToNewUnitMap[firstItem.unit] || firstItem.unit;
-const updatedFirstItemName = ItemToNewItemMap[firstItem.name] || firstItem.name;
+if(!firstItem) return;
 
-worksheet.addRow([date, voucherNumber, updatedDealerName, updatedFirstItemName, firstItem.qty, updatedFirstItemUnit, 0 , 0]);
+const updatedFirstItemUnit = UnitToNewUnitMap[firstItem?.unit] || firstItem?.unit;
+const updatedFirstItemName = ItemToNewItemMap[firstItem?.name] || firstItem?.name;
+
+worksheet.addRow([date, voucherNumber, updatedDealerName, updatedFirstItemName, firstItem?.qty, updatedFirstItemUnit, 0 , 0]);
+
+if(!otherItems || otherItems.length === 0) return;
+
 otherItems.forEach(item => {
-  const updatedUnit = UnitToNewUnitMap[item.unit] || item.unit;
-  const updatedItemName = ItemToNewItemMap[item.name] || item.name;
+  const updatedUnit = UnitToNewUnitMap[item?.unit] || item?.unit;
+  const updatedItemName = ItemToNewItemMap[item?.name] || item?.name;
 
-  worksheet.addRow(["", "", "", updatedItemName, item.qty, updatedUnit, 0,0]);
+  worksheet.addRow(["", "", "", updatedItemName, item?.qty, updatedUnit, 0,0]);
 })
 }
 
