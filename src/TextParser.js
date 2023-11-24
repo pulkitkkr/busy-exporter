@@ -25,16 +25,16 @@ function extractOrderDetail(itemString) {
     };
   }
 
-  const [, index, name, qtyAndUnit] = match;
+  const [, index, name, qty, unitPart] = match;
 
-  // Extract qty and unit from qtyAndUnit by splitting on comma
-  const [qty, unit] = qtyAndUnit.split(',').map(part => part.trim());
+  // Extract unit from unitPart by taking everything before the first comma and trimming
+  const unit = unitPart.split(',')[0].trim();
 
   return {
     index: parseInt(index, 10),
     name: name.trim(),
     qty: parseInt(qty, 10),
-    unit: unit.trim(),
+    unit: unit,
   };
 }
 
